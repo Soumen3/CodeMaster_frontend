@@ -1,0 +1,144 @@
+/* Navbar animations and small utility styles for CodeMaster */
+
+:root{
+	--cm-accent: #2563eb; /* blue-600 */
+	--cm-text: #111827; /* gray-900 */
+}
+
+.cm-navbar{
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	background: #ffffff;
+	box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+	animation: cm-slide-down 320ms ease-out;
+}
+
+.cm-navbar-inner{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 10px 16px;
+}
+
+.cm-brand{
+	font-weight: 700;
+	font-size: 18px;
+	color: var(--cm-text);
+	text-decoration: none;
+	display: inline-block;
+	transform-origin: left center;
+	animation: cm-brand-pop 420ms cubic-bezier(.22,1,.36,1);
+}
+
+.cm-links{
+	display: flex;
+	gap: 8px;
+}
+
+.nav-link{
+	padding: 8px 12px;
+	text-decoration: none;
+	color: var(--cm-text);
+	display: inline-block;
+	position: relative;
+	transition: color 160ms ease;
+}
+
+.nav-link::after{
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 4px;
+	height: 2px;
+	width: 0%;
+	background: var(--cm-accent);
+	transition: width 200ms ease;
+	border-radius: 2px;
+}
+
+.nav-link:hover{
+	color: var(--cm-accent);
+}
+
+.nav-link:hover::after{
+	width: 100%;
+}
+
+.cm-actions{
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.btn-primary{
+	background: var(--cm-accent);
+	color: white;
+	padding: 8px 12px;
+	border-radius: 6px;
+	text-decoration: none;
+	transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.btn-primary:hover{
+	transform: translateY(-2px);
+	box-shadow: 0 6px 18px rgba(37,99,235,0.14);
+}
+
+.btn-ghost{
+	padding: 8px 12px;
+	background: transparent;
+	border: 1px solid rgba(16,24,40,0.06);
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 140ms ease, transform 120ms ease;
+}
+
+.btn-ghost:hover{
+	background: rgba(37,99,235,0.06);
+	transform: translateY(-1px);
+}
+
+.cm-menu-toggle{ /* hidden on desktop, shown on small screens */
+	display: none;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 6px;
+}
+
+.burger{ font-size: 18px }
+
+.cm-mobile-menu{
+	background: #fff;
+	padding: 12px 16px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	border-top: 1px solid rgba(0,0,0,0.04);
+	animation: cm-menu-slide 220ms ease-out;
+}
+
+/* Animations */
+@keyframes cm-slide-down{
+	from { transform: translateY(-8px); opacity: 0 }
+	to   { transform: translateY(0); opacity: 1 }
+}
+
+@keyframes cm-brand-pop{
+	0% { transform: scale(.96); opacity: .9 }
+	70% { transform: scale(1.02) }
+	100% { transform: scale(1); opacity: 1 }
+}
+
+@keyframes cm-menu-slide{
+	from { transform: translateY(-6px); opacity: 0 }
+	to { transform: translateY(0); opacity: 1 }
+}
+
+/* Responsive: show mobile toggle under 720px */
+@media (max-width: 720px){
+	.cm-links{ display: none }
+	.cm-menu-toggle{ display: inline-block }
+}
