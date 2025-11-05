@@ -7,23 +7,27 @@ const AuthSuccess = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
-    const id_token = params.get('id_token')
-    const access_token = params.get('access_token')
-    const email = params.get('email')
+    const dataParam = params.get('data')
 
-    const user = {}
-    if (email) user.email = email
-    if (id_token) user.id_token = id_token
-    if (access_token) user.access_token = access_token
-
-    try {
-      localStorage.setItem('user', JSON.stringify(user))
-    } catch (e) {
-      // ignore storage errors
+    if (dataParam) {
+      try {
+        // Parse the structured JSON response from backend
+        const userData = JSON.parse(dataParam)
+        
+        // Store complete user data in localStorage
+        localStorage.setItem('user', JSON.stringify(userData))
+        
+        // Navigate to profile
+        navigate('/profile')
+      } catch (e) {
+        console.error('Failed to parse auth data:', e)
+        // Fallback: navigate to login on error
+        navigate('/login')
+      }
+    } else {
+      // No data received, redirect to login
+      navigate('/login')
     }
-
-    // navigate to profile or home
-    navigate('/profile')
   }, [location, navigate])
 
   return (

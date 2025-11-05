@@ -3,12 +3,14 @@ import React from 'react'
 const Login = () => {
 	const googleAuth = () => {
 		// Redirect browser to backend OAuth endpoint for Google
-		window.location.href = '/auth/google'
+		const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+		window.location.href = `${backendUrl}/auth/google`
 	}
 
 	const githubAuth = () => {
 		// Redirect browser to backend OAuth endpoint for GitHub
-		window.location.href = '/auth/github'
+		const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+		window.location.href = `${backendUrl}/auth/github`
 	}
 
 	return (
