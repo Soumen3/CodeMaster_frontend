@@ -16,6 +16,8 @@ const AuthSuccess = () => {
         
         // Store complete user data in localStorage
         localStorage.setItem('user', JSON.stringify(userData))
+        console.log(userData);
+        
         
         // Navigate to profile
         navigate('/profile')

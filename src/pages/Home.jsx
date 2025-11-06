@@ -87,6 +87,224 @@ int main(){
           </div>
         </div>
       </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Why Choose CodeMaster?</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Everything you need to excel in coding interviews and improve your problem-solving skills
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="p-6 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-indigo-500 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20">
+              <div className="w-12 h-12 bg-indigo-600/20 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Real-time Code Execution</h3>
+              <p className="text-gray-400">
+                Write and test your code instantly with our fast, sandboxed code runner supporting multiple languages.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="p-6 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-cyan-500 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
+              <div className="w-12 h-12 bg-cyan-600/20 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Track Your Progress</h3>
+              <p className="text-gray-400">
+                Monitor your improvement with detailed statistics and see how you compare with other developers.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="p-6 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20">
+              <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center mb-4">
+                <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Smart Tags & Filters</h3>
+              <p className="text-gray-400">
+                Organize problems by topics, difficulty, and companies to focus on what matters most to you.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-gray-800/40">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-indigo-400 mb-2">500+</div>
+              <div className="text-gray-400">Coding Problems</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-cyan-400 mb-2">50K+</div>
+              <div className="text-gray-400">Active Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-400 mb-2">10+</div>
+              <div className="text-gray-400">Languages Supported</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-green-400 mb-2">24/7</div>
+              <div className="text-gray-400">Practice Access</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">How It Works</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Get started in three simple steps and begin your coding journey
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="relative">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4 relative z-10">
+                  1
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Choose a Problem</h3>
+                <p className="text-gray-400">
+                  Browse our extensive library and pick a problem that matches your skill level and interests.
+                </p>
+              </div>
+              {/* Connector line */}
+              <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-gradient-to-r from-indigo-600 to-cyan-600 -z-10"></div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-cyan-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4 relative z-10">
+                  2
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Write Your Solution</h3>
+                <p className="text-gray-400">
+                  Code your solution in your preferred language with our intuitive online editor.
+                </p>
+              </div>
+              {/* Connector line */}
+              <div className="hidden md:block absolute top-8 left-1/2 w-full h-0.5 bg-gradient-to-r from-cyan-600 to-purple-600 -z-10"></div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-2xl font-bold mb-4">
+                  3
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Test & Submit</h3>
+                <p className="text-gray-400">
+                  Run test cases, debug your code, and submit when you're ready. Get instant feedback!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-gray-800/40">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
+            <p className="text-gray-400">Join thousands of developers improving their skills</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Testimonial 1 */}
+            <div className="p-6 bg-gray-800 rounded-xl border border-gray-700">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  AS
+                </div>
+                <div className="ml-3">
+                  <div className="font-semibold">Alex Smith</div>
+                  <div className="text-sm text-gray-400">Software Engineer</div>
+                </div>
+              </div>
+              <p className="text-gray-300 italic">
+                "CodeMaster helped me land my dream job at a FAANG company. The problems are well-curated and the platform is super smooth!"
+              </p>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div className="p-6 bg-gray-800 rounded-xl border border-gray-700">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  MK
+                </div>
+                <div className="ml-3">
+                  <div className="font-semibold">Maria Kim</div>
+                  <div className="text-sm text-gray-400">Full Stack Developer</div>
+                </div>
+              </div>
+              <p className="text-gray-300 italic">
+                "The real-time code execution and immediate feedback make learning so much faster. Best coding platform I've used!"
+              </p>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="p-6 bg-gray-800 rounded-xl border border-gray-700">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  RJ
+                </div>
+                <div className="ml-3">
+                  <div className="font-semibold">Raj Patel</div>
+                  <div className="text-sm text-gray-400">CS Student</div>
+                </div>
+              </div>
+              <p className="text-gray-300 italic">
+                "As a student, CodeMaster has been invaluable for interview prep. The tag system helps me focus on specific topics."
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-4">Ready to Level Up Your Skills?</h2>
+          <p className="text-gray-400 text-lg mb-8">
+            Join CodeMaster today and start solving problems that matter.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a 
+              href="/login" 
+              className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold shadow-lg transform hover:-translate-y-1 transition-all"
+            >
+              Get Started Free
+            </a>
+            <a 
+              href="/problems" 
+              className="px-8 py-3 border border-gray-700 text-gray-200 rounded-lg font-semibold hover:bg-gray-800 transition-all"
+            >
+              Explore Problems
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };

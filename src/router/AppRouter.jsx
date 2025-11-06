@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Home from '../pages/Home'
-// import ProblemList from '../pages/ProblemList'
+import ProblemList from '../pages/ProblemList'
 // import ProblemDetail from '../pages/ProblemDetail'
 import Login from '../pages/Login'
 import AuthSuccess from '../pages/AuthSuccess'
@@ -19,7 +19,7 @@ const AppRouter = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Navigate to="/" replace />} />
-            {/* <Route path="/problems" element={<ProblemList />} /> */}
+            <Route path="/problems" element={<ProblemList />} />
             {/* <Route path="/problems/:id" element={<ProblemDetail />} /> */}
             <Route path="/tags" element={<Tags />} />
             <Route path="/login" element={<Login />} />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ConfirmDialog from "./ConfirmDialog";
 
 /**
  * Simple Navbar component
@@ -11,6 +12,7 @@ import React, { useEffect, useState } from "react";
 const Navbar = ({ brand = "CodeMaster" }) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [user, setUser] = useState(null);
+	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
 	useEffect(() => {
 		try {
@@ -27,18 +29,37 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 	}, []);
 
 	const handleLogout = () => {
+		// Show confirmation dialog
+		setShowLogoutDialog(true);
+	};
+	
+	const confirmLogout = () => {
 		try {
 			localStorage.removeItem("user");
 		} catch (e) {
 			// ignore
 		}
 		setUser(null);
+		setShowLogoutDialog(false);
 		// navigate to login page
 		window.location.href = "/login";
 	};
+	
+	const cancelLogout = () => {
+		setShowLogoutDialog(false);
+	};
 
 		return (
-			<nav className="sticky top-0 z-40 bg-gray-900 border-b border-gray-800 shadow-sm" role="navigation">
+			<>
+				<ConfirmDialog
+					isOpen={showLogoutDialog}
+					onClose={cancelLogout}
+					onConfirm={confirmLogout}
+					title="Confirm Logout"
+					message="Are you sure you want to logout? You will need to sign in again to access your account."
+				/>
+				
+				<nav className="sticky top-0 z-40 bg-gray-900 border-b border-gray-800 shadow-sm" role="navigation">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between h-14">
 						<a href="/" className="font-bold text-lg text-white animate-pulse" aria-label="CodeMaster Home">
@@ -108,7 +129,8 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 					</div>
 				)}
 			</nav>
-		);
+		</>
+	);
 };
 
 export default Navbar;
