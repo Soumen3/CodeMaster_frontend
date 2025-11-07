@@ -124,41 +124,45 @@ const ProblemList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-purple-900 to-gray-900 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Problem Set</h1>
-          <p className="text-gray-400">Practice coding problems and improve your skills</p>
+    <main className="min-h-screen bg-gray-900 text-gray-100">
+      {/* Animated background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-linear-to-br from-gray-900 via-gray-800 to-black opacity-90" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-6 relative z-10">
+        {/* Compact Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-white">
+            Problems
+          </h1>
         </div>
 
-        {/* Filters */}
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 mb-6 border border-gray-700">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* Compact Filters */}
+        <div className="bg-gray-800/40 backdrop-blur-sm rounded-lg p-4 mb-4 border border-gray-700/50">
+          <div className="flex flex-wrap gap-3 items-end">
             {/* Search */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Search</label>
+            <div className="flex-1 min-w-[200px]">
               <input
                 type="text"
                 placeholder="Search problems..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 text-sm bg-gray-700/50 border border-gray-600/50 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent transition"
               />
             </div>
 
             {/* Difficulty Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Difficulty</label>
+            <div className="w-32">
               <select
                 value={selectedDifficulty}
                 onChange={(e) => {
                   setSelectedDifficulty(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 text-sm bg-gray-700/50 border border-gray-600/50 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent transition"
               >
-                <option value="">All</option>
+                <option value="">Difficulty</option>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
@@ -166,15 +170,14 @@ const ProblemList = () => {
             </div>
 
             {/* Tag Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Tag</label>
+            <div className="w-40">
               <select
                 value={selectedTag}
                 onChange={(e) => {
                   setSelectedTag(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 text-sm bg-gray-700/50 border border-gray-600/50 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent transition"
               >
                 <option value="">All Tags</option>
                 {tags.map((tag) => (
@@ -184,29 +187,29 @@ const ProblemList = () => {
                 ))}
               </select>
             </div>
-          </div>
 
-          {/* Clear Filters */}
-          {(selectedDifficulty || selectedTag || searchQuery) && (
-            <button
-              onClick={clearFilters}
-              className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
-            >
-              Clear Filters
-            </button>
-          )}
+            {/* Clear Filters */}
+            {(selectedDifficulty || selectedTag || searchQuery) && (
+              <button
+                onClick={clearFilters}
+                className="px-3 py-2 text-sm bg-gray-700/50 hover:bg-gray-600/50 text-white rounded-md transition"
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Loading State */}
         {loading && (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
           </div>
         )}
 
         {/* Error State */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-6">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
             <p className="text-red-400">{error}</p>
           </div>
         )}
@@ -215,76 +218,59 @@ const ProblemList = () => {
         {!loading && !error && (
           <>
             {filteredProblems.length === 0 ? (
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-12 text-center border border-gray-700">
-                <p className="text-gray-400 text-lg">No problems found matching your criteria.</p>
+              <div className="bg-gray-800/40 backdrop-blur-sm rounded-lg p-8 text-center border border-gray-700/50">
+                <p className="text-gray-400">No problems found matching your criteria.</p>
               </div>
             ) : (
               <>
-                {/* Problems Count */}
-                <div className="mb-4">
-                  <p className="text-gray-400">
-                    Showing {filteredProblems.length} of {totalProblems} problems
-                  </p>
-                </div>
-
                 {/* Problems Table */}
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700">
+                <div className="bg-gray-800/40 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700/50">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gray-900/50">
+                      <thead className="bg-gray-900/60 border-b border-gray-700/50">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                            #
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-16">
+                            Status
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                             Title
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-28">
                             Difficulty
-                          </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                            Tags
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-700">
+                      <tbody className="divide-y divide-gray-700/30">
                         {filteredProblems.map((problem, index) => (
                           <tr
                             key={problem.id}
                             onClick={() => handleProblemClick(problem.id)}
-                            className="hover:bg-gray-700/30 cursor-pointer transition-colors"
+                            className="hover:bg-gray-700/20 cursor-pointer transition-colors"
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                              {(currentPage - 1) * problemsPerPage + index + 1}
+                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                              {/* Status icon placeholder */}
+                              <div className="w-4 h-4 rounded-full border-2 border-gray-600"></div>
                             </td>
-                            <td className="px-6 py-4 text-sm">
-                              <div className="flex flex-col">
-                                <span className="text-white font-medium hover:text-purple-400 transition-colors">
-                                  {problem.title}
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-3">
+                                <span className="text-sm text-white font-medium hover:text-indigo-400 transition-colors">
+                                  {(currentPage - 1) * problemsPerPage + index + 1}. {problem.title}
                                 </span>
-                                {problem.description && (
-                                  <span className="text-gray-500 text-xs mt-1 line-clamp-1">
-                                    {problem.description.substring(0, 100)}...
-                                  </span>
+                                {problem.tags && problem.tags.length > 0 && (
+                                  <div className="flex gap-1">
+                                    {problem.tags.slice(0, 2).map((tag) => (
+                                      <span key={tag.id} className="text-xs text-gray-500 bg-gray-700/50 px-2 py-0.5 rounded">
+                                        {tag.name}
+                                      </span>
+                                    ))}
+                                  </div>
                                 )}
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyBgColor(problem.difficulty)} ${getDifficultyColor(problem.difficulty)}`}>
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <span className={`text-xs font-medium ${getDifficultyColor(problem.difficulty)}`}>
                                 {problem.difficulty}
                               </span>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex flex-wrap gap-2">
-                                {problem.tags?.slice(0, 3).map((tag) => (
-                                  <TagBadge key={tag.id} tag={tag} />
-                                ))}
-                                {problem.tags?.length > 3 && (
-                                  <span className="text-xs text-gray-500">
-                                    +{problem.tags.length - 3} more
-                                  </span>
-                                )}
-                              </div>
                             </td>
                           </tr>
                         ))}
@@ -293,53 +279,58 @@ const ProblemList = () => {
                   </div>
                 </div>
 
-                {/* Pagination */}
+                {/* Compact Pagination */}
                 {totalPages > 1 && (
-                  <div className="mt-6 flex justify-center items-center gap-2">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      Previous
-                    </button>
-                    
-                    <div className="flex gap-2">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        let pageNum;
-                        if (totalPages <= 5) {
-                          pageNum = i + 1;
-                        } else if (currentPage <= 3) {
-                          pageNum = i + 1;
-                        } else if (currentPage >= totalPages - 2) {
-                          pageNum = totalPages - 4 + i;
-                        } else {
-                          pageNum = currentPage - 2 + i;
-                        }
-
-                        return (
-                          <button
-                            key={pageNum}
-                            onClick={() => handlePageChange(pageNum)}
-                            className={`px-4 py-2 rounded-lg transition-colors ${
-                              currentPage === pageNum
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      })}
+                  <div className="mt-4 flex justify-between items-center text-sm">
+                    <div className="text-gray-400">
+                      {filteredProblems.length} / {totalProblems} problems
                     </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 bg-gray-700/50 text-white rounded hover:bg-gray-600/50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                      >
+                        ←
+                      </button>
+                      
+                      <div className="flex gap-1">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          let pageNum;
+                          if (totalPages <= 5) {
+                            pageNum = i + 1;
+                          } else if (currentPage <= 3) {
+                            pageNum = i + 1;
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNum = totalPages - 4 + i;
+                          } else {
+                            pageNum = currentPage - 2 + i;
+                          }
 
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      Next
-                    </button>
+                          return (
+                            <button
+                              key={pageNum}
+                              onClick={() => handlePageChange(pageNum)}
+                              className={`px-3 py-1 rounded transition ${
+                                currentPage === pageNum
+                                  ? 'bg-indigo-600 text-white'
+                                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                              }`}
+                            >
+                              {pageNum}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 bg-gray-700/50 text-white rounded hover:bg-gray-600/50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                      >
+                        →
+                      </button>
+                    </div>
                   </div>
                 )}
               </>
@@ -347,7 +338,7 @@ const ProblemList = () => {
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 };
 
