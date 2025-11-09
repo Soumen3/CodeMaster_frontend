@@ -70,6 +70,17 @@ const problemService = {
   deleteProblem: async (id) => {
     const response = await apiClient.delete(`/problems/${id}`);
     return response.data;
+  },
+
+  /**
+   * Get code template for a problem in a specific language
+   * @param {number} id - Problem ID
+   * @param {string} language - Programming language (python/javascript/cpp/java/c)
+   * @returns {Promise} - Promise with code template
+   */
+  getCodeTemplate: async (id, language) => {
+    const response = await apiClient.get(`/problems/${id}/template/${language}`);
+    return response.data;
   }
 };
 

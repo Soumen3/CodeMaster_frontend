@@ -5,6 +5,8 @@ import tagService from '../services/tagService';
 import constraintService from '../services/constraintService';
 import TagBadge from '../components/TagBadge';
 import CodeEditor from '../components/CodeEditor';
+import TestResults from '../components/TestResults';
+import TestCaseDisplay from '../components/TestCaseDisplay';
 
 const ProblemDetail = () => {
   const { id } = useParams();
@@ -33,33 +35,21 @@ const ProblemDetail = () => {
 
   // Callbacks for code editor actions
   const handleRunCode = () => {
-    setIsRunning(true);
-    setResultTab('testcase');
-    setOutput('Running code...\n');
+    setResultTab('result'); // Switch to Test Result tab when running
     // Trigger run code in CodeEditor
     window.dispatchEvent(new CustomEvent('runCode'));
-    setTimeout(() => {
-      setOutput('Code execution feature coming soon!\n\nThis will run your code against test cases.');
-      setIsRunning(false);
-    }, 1500);
   };
 
   const handleReset = () => {
-    setOutput('');
+    setOutput(''); // Clear output when resetting
     // Trigger reset in CodeEditor
     window.dispatchEvent(new CustomEvent('resetCode'));
   };
 
   const handleSubmit = () => {
-    setIsRunning(true);
-    setResultTab('result');
-    setOutput('Submitting code...\n');
+    setResultTab('result'); // Switch to Test Result tab when submitting
     // Trigger submit in CodeEditor
     window.dispatchEvent(new CustomEvent('submitCode'));
-    setTimeout(() => {
-      setOutput('Submission feature coming soon!\n\nThis will test your code against all test cases (including hidden ones).');
-      setIsRunning(false);
-    }, 1500);
   };
 
   useEffect(() => {
@@ -360,7 +350,11 @@ const ProblemDetail = () => {
         }`}>
           {/* 3. Code Editor Section - Fixed height, scrollable content */}
           <div className="h-[400px] lg:h-3/5 flex flex-col border-b border-gray-700/50 shrink-0">
-            <CodeEditor problemId={id} onRunningChange={setIsRunning} />
+            <CodeEditor 
+              problemId={id} 
+              onRunningChange={setIsRunning} 
+              onOutputChange={setOutput}
+            />
           </div>
 
           {/* 4. Result Section - Fixed height, scrollable content */}
@@ -397,14 +391,10 @@ const ProblemDetail = () => {
 
             {/* Result Content - Scrollable */}
             <div className="flex-1 p-3 overflow-y-auto min-h-0">
-              {output ? (
-                <pre className="text-gray-300 text-xs font-mono whitespace-pre-wrap">{output}</pre>
+              {resultTab === 'testcase' ? (
+                <TestCaseDisplay testCases={testCases} />
               ) : (
-                <p className="text-gray-500 text-xs">
-                  {resultTab === 'testcase' 
-                    ? 'You must select a testcase or click "Run" to see results.' 
-                    : 'You must click "Submit" to see test results.'}
-                </p>
+                <TestResults output={output} resultTab={resultTab} />
               )}
             </div>
           </div>
