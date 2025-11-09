@@ -15,6 +15,10 @@ apiClient.interceptors.request.use(
     const token = localStorage.getItem('access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      // console.log('📤 API Request:', config.method.toUpperCase(), config.url);
+      // console.log('🔑 Token preview:', `${token.substring(0, 20)}...`);
+    } else {
+      console.warn('⚠️ No token found in localStorage for request:', config.url);
     }
     return config;
   },
@@ -32,11 +36,13 @@ apiClient.interceptors.response.use(
     if (error.response) {
       // Server responded with error status
       if (error.response.status === 401) {
-        // Unauthorized - clear token and redirect to login
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
+        // Unauthorized - log warning but DON'T auto-redirect
+        // Let the calling component handle it appropriately
+        console.warn('401 Unauthorized - Authentication failed');
+      }
+      if (error.response.status === 403) {
+        // Forbidden - log warning but DON'T auto-redirect
+        console.warn('403 Forbidden - Permission denied');
       }
     } else if (error.request) {
       // Request made but no response received

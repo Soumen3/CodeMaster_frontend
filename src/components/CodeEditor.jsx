@@ -3,6 +3,7 @@ import Editor from '@monaco-editor/react';
 import PropTypes from 'prop-types';
 import codeExecutionService from '../services/codeExecutionService';
 import problemService from '../services/problemService';
+import submissionService from '../services/submissionService';
 
 const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
   const editorRef = useRef(null);
@@ -14,6 +15,7 @@ const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
   const [templateCache, setTemplateCache] = useState({});
   const [codeCache, setCodeCache] = useState({}); // Cache for user-written code per language
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false); // Track if submission was successful
 
   // Fetch dynamic template from backend
   const fetchTemplate = async (lang) => {
@@ -26,7 +28,6 @@ const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
     try {
       setIsLoadingTemplate(true);
       const response = await problemService.getCodeTemplate(problemId, lang);
-      console.log(response);
       
       const template = response.code;
       
@@ -46,15 +47,39 @@ const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
     }
   };
 
-  // Initialize with dynamic template
+  // Initialize with dynamic template or accepted submission
   useEffect(() => {
-    const loadInitialTemplate = async () => {
+    const loadInitialCode = async () => {
       setIsLoadingTemplate(true);
-      setCode('// Loading code template...');
-      const template = await fetchTemplate(language);
-      setCode(template);
+      setCode('// Loading...');
+      
+      try {
+        // First, try to get accepted submission (if user is logged in)
+        const acceptedSubmission = await submissionService.getAcceptedSubmission(problemId);
+        
+        if (acceptedSubmission && acceptedSubmission.code && acceptedSubmission.language) {
+          // User has an accepted submission - load it
+          console.log('Loading accepted submission:', acceptedSubmission);
+          setLanguage(acceptedSubmission.language);
+          setCode(acceptedSubmission.code);
+          console.log('✅ Loaded accepted solution');
+        } else {
+          // No accepted submission - load template
+          const template = await fetchTemplate(language);
+          setCode(template);
+          console.log('📝 Loaded default template');
+        }
+      } catch (error) {
+        console.error('Error loading initial code:', error);
+        // Fallback to template on error
+        const template = await fetchTemplate(language);
+        setCode(template);
+      } finally {
+        setIsLoadingTemplate(false);
+      }
     };
-    loadInitialTemplate();
+    
+    loadInitialCode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [problemId]); // Run when problemId changes
 
@@ -85,9 +110,9 @@ const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
   // Update parent component when output changes
   useEffect(() => {
     if (onOutputChange) {
-      onOutputChange(output);
+      onOutputChange(output, isSuccess); // Pass isSuccess along with output
     }
-  }, [output, onOutputChange]);
+  }, [output, isSuccess, onOutputChange]);
 
   // Language configurations
   const languageConfigs = {
@@ -117,19 +142,39 @@ const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
     // Check if we have cached code for the new language
     if (codeCache[newLanguage]) {
       // Use cached code if available
+      console.log('📝 Loading cached code for', newLanguage);
       setCode(codeCache[newLanguage]);
     } else {
-      // Load template if no cached code
-      setCode('// Loading code template...');
-      const newTemplate = await fetchTemplate(newLanguage);
-      setCode(newTemplate);
+      // No cached code - check for accepted submission in this language
+      setCode('// Loading...');
+      
+      try {
+        // Pass the language parameter to get language-specific submission
+        const acceptedSubmission = await submissionService.getAcceptedSubmission(problemId, newLanguage);
+        
+        if (acceptedSubmission) {
+          console.log('✅ Loading accepted submission for', newLanguage);
+          setCode(acceptedSubmission.code);
+        } else {
+          // No accepted submission in this language - load template
+          console.log('📝 Loading template for', newLanguage);
+          const newTemplate = await fetchTemplate(newLanguage);
+          setCode(newTemplate);
+        }
+      } catch (error) {
+        console.error('Error loading code for language change:', error);
+        // Fallback to template on error
+        const newTemplate = await fetchTemplate(newLanguage);
+        setCode(newTemplate);
+      }
     }
   };
 
   const runCode = async () => {
     setIsRunning(true);
     setActiveTab('output');
-    setOutput('Running code...\n');
+    setOutput('⏳ Running your code...\n\nCompiling and executing against sample test cases.\nPlease wait...');
+    setIsSuccess(false); // Reset success state
 
     try {
       const result = await codeExecutionService.runCode(problemId, code, language);
@@ -137,25 +182,69 @@ const CodeEditor = ({ problemId, onRunningChange, onOutputChange }) => {
       
       const formattedOutput = codeExecutionService.formatTestResults(result);
       setOutput(formattedOutput);
+      setIsSuccess(false); // Run code doesn't show success theme
       setIsRunning(false);
     } catch (error) {
       setOutput(`Error: ${error.message}\n\nPlease make sure the backend server is running.`);
+      setIsSuccess(false);
       setIsRunning(false);
     }
   };
 
   const submitCode = async () => {
+    // Check if user is logged in
+    const token = localStorage.getItem('access_token');
+    const user = localStorage.getItem('user');
+    
+    console.log('=== Submit Debug Info ===');
+    console.log('Token exists:', !!token);
+    console.log('Token preview:', token ? `${token.substring(0, 20)}...` : 'null');
+    console.log('User exists:', !!user);
+    console.log('User data:', user ? JSON.parse(user) : null);
+    
+    if (!token) {
+      console.log("Token Not Found - showing auth required message");
+      
+      setActiveTab('results');
+      setOutput('⚠️  Authentication Required\n\nYou must be logged in to submit code.\n\nPlease login with Google or GitHub to save your submissions and track your progress.');
+      setIsSuccess(false);
+      return;
+    }
+
     setIsRunning(true);
     setActiveTab('results');
-    setOutput('Submitting code...\n');
+    setOutput('⏳ Submitting your code...\n\nRunning against all test cases (including hidden ones).\nThis may take a few moments...\n\nPlease wait...');
+    setIsSuccess(false); // Reset success state
 
     try {
+      console.log('Calling submitCode API...');
       const result = await codeExecutionService.submitCode(problemId, code, language);
-      const formattedOutput = codeExecutionService.formatTestResults(result);
+      console.log('Submit result:', result);
+      
+      // Check if all tests passed
+      const allPassed = result.passed_tests === result.total_tests;
+      setIsSuccess(allPassed); // Set success state for green theme
+      
+      const formattedOutput = codeExecutionService.formatTestResults(result, true); // Pass true for submission
       setOutput(formattedOutput);
       setIsRunning(false);
     } catch (error) {
-      setOutput(`Submission feature coming soon!\n\nThis will test your code against all test cases (including hidden ones).`);
+      console.error('Submit error:', error);
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      
+      setIsSuccess(false);
+      
+      // Check if it's an authentication error
+      if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        const errorDetail = error.response.data?.detail || error.message;
+        setOutput(`⚠️  Authentication Error\n\nStatus: ${error.response.status}\nError: ${errorDetail}\n\nThis usually means your token is invalid or expired.\n\nPlease try:\n1. Logout from the navbar\n2. Login again with Google or GitHub\n3. Try submitting again`);
+      } else if (error.message.includes('401') || error.message.includes('403') || error.message.includes('credentials')) {
+        setOutput(`⚠️  Authentication Error\n\nYour session may have expired. Please login again to submit your code.\n\nError: ${error.message}`);
+      } else {
+        setOutput(`❌ Submission Failed\n\n${error.message}\n\nPlease try again or contact support if the issue persists.`);
+      }
       setIsRunning(false);
     }
   };

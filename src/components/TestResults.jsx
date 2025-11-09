@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const TestResults = ({ output, resultTab }) => {
+const TestResults = ({ output, resultTab, isSuccess = false }) => {
   if (!output) {
     return (
       <p className="text-gray-500 text-xs">
@@ -8,6 +8,42 @@ const TestResults = ({ output, resultTab }) => {
           ? 'You must select a testcase or click "Run" to see results.' 
           : 'You must click "Submit" to see test results.'}
       </p>
+    );
+  }
+
+  // If it's a success submission, show special green-themed display
+  if (isSuccess && output.includes('🎉 SUCCESS')) {
+    return (
+      <div className="space-y-3">
+        <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/30 backdrop-blur-sm rounded-lg p-6 border-2 border-green-500/50 shadow-lg shadow-green-500/20">
+          <div className="text-center space-y-3">
+            <div className="text-4xl mb-2">🎉</div>
+            <div className="text-xl font-bold text-green-400">SUCCESS!</div>
+            <div className="text-sm text-green-300 font-medium">All Test Cases Passed!</div>
+            
+            {/* Extract and display stats */}
+            {output.split('\n').map((line, idx) => {
+              if (line.includes('Passed:') || line.includes('Execution Time:')) {
+                return (
+                  <div key={idx} className="text-xs text-green-200 font-mono">
+                    {line}
+                  </div>
+                );
+              }
+              return null;
+            })}
+            
+            <div className="pt-3 border-t border-green-500/30 mt-4">
+              <p className="text-xs text-green-300/80">
+                Congratulations! Your solution is correct.
+              </p>
+              <p className="text-xs text-green-300/80">
+                All test cases (including hidden ones) passed successfully.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -123,6 +159,7 @@ const TestResults = ({ output, resultTab }) => {
 TestResults.propTypes = {
   output: PropTypes.string,
   resultTab: PropTypes.string.isRequired,
+  isSuccess: PropTypes.bool,
 };
 
 export default TestResults;

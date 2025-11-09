@@ -1,6 +1,32 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Toast from '../components/Toast'
 
 const Login = () => {
+	const navigate = useNavigate()
+	const [showToast, setShowToast] = useState(false)
+	const [isAlreadyLoggedIn, setIsAlreadyLoggedIn] = useState(false)
+
+	useEffect(() => {
+		// Check if user is already logged in
+		try {
+			const user = localStorage.getItem('user')
+			const token = localStorage.getItem('access_token')
+			
+			if (user && token) {
+				setIsAlreadyLoggedIn(true)
+				setShowToast(true)
+				
+				// Redirect to home after showing toast
+				setTimeout(() => {
+					navigate('/')
+				}, 1500)
+			}
+		} catch (e) {
+			// Ignore errors
+		}
+	}, [navigate])
+
 	const googleAuth = () => {
 		// Redirect browser to backend OAuth endpoint for Google
 		const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
@@ -11,6 +37,29 @@ const Login = () => {
 		// Redirect browser to backend OAuth endpoint for GitHub
 		const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 		window.location.href = `${backendUrl}/auth/github`
+	}
+
+	// Show loading state while redirecting
+	if (isAlreadyLoggedIn) {
+		return (
+			<>
+				{showToast && (
+					<Toast
+						message="You are already logged in! Redirecting to home..."
+						type="info"
+						duration={1500}
+						onClose={() => setShowToast(false)}
+						position="top-center"
+					/>
+				)}
+				<div className="min-h-screen bg-gray-900 flex items-center justify-center">
+					<div className="text-center">
+						<div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mb-4"></div>
+						<p className="text-gray-400">Redirecting...</p>
+					</div>
+				</div>
+			</>
+		)
 	}
 
 	return (

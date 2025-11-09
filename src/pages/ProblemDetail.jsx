@@ -20,6 +20,7 @@ const ProblemDetail = () => {
   const [error, setError] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
   const [output, setOutput] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false); // Track if submission was successful
   const [resultTab, setResultTab] = useState('testcase');
   const [mobileTab, setMobileTab] = useState('description'); // 'description' or 'code'
 
@@ -353,7 +354,10 @@ const ProblemDetail = () => {
             <CodeEditor 
               problemId={id} 
               onRunningChange={setIsRunning} 
-              onOutputChange={setOutput}
+              onOutputChange={(output, success) => {
+                setOutput(output);
+                setIsSuccess(success || false);
+              }}
             />
           </div>
 
@@ -394,7 +398,7 @@ const ProblemDetail = () => {
               {resultTab === 'testcase' ? (
                 <TestCaseDisplay testCases={testCases} />
               ) : (
-                <TestResults output={output} resultTab={resultTab} />
+                <TestResults output={output} resultTab={resultTab} isSuccess={isSuccess} />
               )}
             </div>
           </div>
