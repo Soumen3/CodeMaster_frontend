@@ -72,7 +72,7 @@ const Login = () => {
 						<img 
 							src="/logo.png" 
 							alt="CodeMaster Logo" 
-							className="w-16 h-16 rounded-xl shadow-lg"
+							className="w-20 h-14 rounded-xl shadow-lg"
 						/>
 					</div>
 					
