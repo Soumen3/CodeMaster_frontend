@@ -65,12 +65,19 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 		return location.pathname === path;
 	};
 
+	const handleNavClick = () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	};
+
 	const NavLink = ({ to, children, mobile = false }) => {
 		const active = isActive(to);
 		return (
 			<Link
 				to={to}
-				onClick={mobile ? () => setMenuOpen(false) : undefined}
+				onClick={() => {
+					handleNavClick();
+					if (mobile) setMenuOpen(false);
+				}}
 				className={`
 					relative transition-all duration-200
 					${mobile ? 'block py-2 px-3 rounded-md' : 'px-3 py-2'}
@@ -116,12 +123,12 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 							className="flex items-center gap-2 group" 
 							aria-label="CodeMaster Home"
 						>
-							<div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-all duration-300 group-hover:scale-110">
-								<span className="text-white font-bold text-lg">C</span>
-							</div>
-							<span className="font-bold text-xl bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-								{brand}
-							</span>
+							<img 
+								src="/logo.png" 
+								type="image/x-icon"
+								alt="CodeMaster Logo" 
+								className="w-20 h-12 rounded-lg transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(99,102,241,0.6)]"
+							/>
 						</Link>
 
 						{/* Desktop Navigation */}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 import Home from '../pages/Home'
 import ProblemList from '../pages/ProblemList'
 import ProblemDetail from '../pages/ProblemDetail'
@@ -18,6 +19,9 @@ const Layout = () => {
   const shouldHideNavbar = hiddenNavbarRoutes.some(route => 
     location.pathname.startsWith(route) && location.pathname !== '/problems'
   )
+  
+  // Also hide footer on problem detail pages for better UX
+  const shouldHideFooter = shouldHideNavbar
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -35,6 +39,7 @@ const Layout = () => {
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </div>
+      {!shouldHideFooter && <Footer />}
     </div>
   )
 }

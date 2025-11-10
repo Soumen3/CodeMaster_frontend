@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import problemService from '../services/problemService';
 import tagService from '../services/tagService';
 import TagBadge from '../components/TagBadge';
 
 const ProblemList = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [problems, setProblems] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,25 @@ const ProblemList = () => {
 
   useEffect(() => {
     fetchTags();
+    
+    // Check if there's a tag parameter in the URL
+    const tagParam = searchParams.get('tag');
+    if (tagParam) {
+      setSearchQuery(''); // Clear search when coming from tag filter
+    }
   }, []);
+
+  useEffect(() => {
+    // Set selected tag from URL parameter
+    const tagParam = searchParams.get('tag');
+    if (tagParam && tags.length > 0) {
+      // Find the tag by name
+      const tag = tags.find(t => t.name.toLowerCase() === tagParam.toLowerCase());
+      if (tag) {
+        setSelectedTag(tag.id.toString());
+      }
+    }
+  }, [searchParams, tags]);
 
   useEffect(() => {
     fetchProblems();

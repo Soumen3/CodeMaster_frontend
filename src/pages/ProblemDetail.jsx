@@ -7,6 +7,7 @@ import TagBadge from '../components/TagBadge';
 import CodeEditor from '../components/CodeEditor';
 import TestResults from '../components/TestResults';
 import TestCaseDisplay from '../components/TestCaseDisplay';
+import Toast from '../components/Toast';
 
 const ProblemDetail = () => {
   const { id } = useParams();
@@ -23,6 +24,8 @@ const ProblemDetail = () => {
   const [isSuccess, setIsSuccess] = useState(false); // Track if submission was successful
   const [resultTab, setResultTab] = useState('testcase');
   const [mobileTab, setMobileTab] = useState('description'); // 'description' or 'code'
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   // Ref for Topics section
   const topicsRef = useRef(null);
@@ -48,6 +51,23 @@ const ProblemDetail = () => {
   };
 
   const handleSubmit = () => {
+    // Check if user is logged in
+    const token = localStorage.getItem('access_token');
+    const user = localStorage.getItem('user');
+    
+    if (!token || !user) {
+      // Show toast message and redirect to login
+      setToastMessage('Please login to submit your code and track your progress!');
+      setShowToast(true);
+      
+      // Redirect to login page after showing toast
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+      
+      return;
+    }
+    
     setResultTab('result'); // Switch to Test Result tab when submitting
     // Trigger submit in CodeEditor
     window.dispatchEvent(new CustomEvent('submitCode'));
@@ -404,6 +424,17 @@ const ProblemDetail = () => {
           </div>
         </div>
       </div>
+      
+      {/* Toast Notification */}
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          type="warning"
+          duration={2000}
+          onClose={() => setShowToast(false)}
+          position="top-center"
+        />
+      )}
     </div>
   );
 };

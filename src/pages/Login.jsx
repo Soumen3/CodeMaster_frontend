@@ -67,8 +67,17 @@ const Login = () => {
 			<div className="relative max-w-md w-full">
 			<div className="absolute -inset-1 bg-linear-to-r from-indigo-600 via-purple-600 to-cyan-500 rounded-2xl blur opacity-30 animate-pulse" />
 				<div className="relative bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl">
-					<h1 className="text-2xl font-bold text-white">Welcome back</h1>
-					<p className="mt-2 text-sm text-gray-400">Sign in using one of the providers below. We only use OAuth and store minimal profile info.</p>
+					{/* Logo */}
+					<div className="flex justify-center mb-6">
+						<img 
+							src="/logo.png" 
+							alt="CodeMaster Logo" 
+							className="w-16 h-16 rounded-xl shadow-lg"
+						/>
+					</div>
+					
+					<h1 className="text-2xl font-bold text-white text-center">Welcome to CodeMaster</h1>
+					<p className="mt-2 text-sm text-gray-400 text-center">Sign in using one of the providers below. We only use OAuth and store minimal profile info.</p>
 
 					<div className="mt-6 flex flex-col gap-3">
 						<button
