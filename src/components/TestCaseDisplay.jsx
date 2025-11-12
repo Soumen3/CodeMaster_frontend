@@ -83,14 +83,14 @@ const TestCaseDisplay = ({ testCases }) => {
             </div>
             
             {/* Explanation if available */}
-            {testCase.explanation && (
+            {/* {testCase.explanation && (
               <div>
                 <div className="text-[10px] font-medium text-gray-400 mb-1">Explanation:</div>
                 <div className="text-xs text-gray-300 leading-relaxed">
                   {testCase.explanation}
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       ))}
