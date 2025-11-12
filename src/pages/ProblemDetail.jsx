@@ -26,9 +26,27 @@ const ProblemDetail = () => {
   const [mobileTab, setMobileTab] = useState('description'); // 'description' or 'code'
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  
+  // Resizable panel states
+  const [leftPanelWidth, setLeftPanelWidth] = useState(50); // percentage
+  const [codeEditorHeight, setCodeEditorHeight] = useState(60); // percentage
+  const [isDraggingHorizontal, setIsDraggingHorizontal] = useState(false);
+  const [isDraggingVertical, setIsDraggingVertical] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
   // Ref for Topics section
   const topicsRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Handle screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Scroll to Topics section
   const scrollToTopics = () => {
@@ -36,6 +54,93 @@ const ProblemDetail = () => {
       topicsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  // Handle horizontal resize (left/right panels)
+  const handleHorizontalMouseDown = (e) => {
+    e.preventDefault();
+    setIsDraggingHorizontal(true);
+  };
+
+  const handleHorizontalMouseMove = (e) => {
+    if (!isDraggingHorizontal || !containerRef.current) return;
+    
+    const container = containerRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+    
+    // Limit between 20% and 80%
+    if (newWidth >= 20 && newWidth <= 80) {
+      setLeftPanelWidth(newWidth);
+    }
+  };
+
+  const handleHorizontalMouseUp = () => {
+    setIsDraggingHorizontal(false);
+  };
+
+  // Handle vertical resize (code editor/results)
+  const handleVerticalMouseDown = (e) => {
+    e.preventDefault();
+    setIsDraggingVertical(true);
+  };
+
+  const handleVerticalMouseMove = (e) => {
+    if (!isDraggingVertical || !containerRef.current) return;
+    
+    const rightPanel = containerRef.current.querySelector('.right-panel');
+    if (!rightPanel) return;
+    
+    const panelRect = rightPanel.getBoundingClientRect();
+    const newHeight = ((e.clientY - panelRect.top) / panelRect.height) * 100;
+    
+    // Limit between 20% and 80%
+    if (newHeight >= 20 && newHeight <= 80) {
+      setCodeEditorHeight(newHeight);
+    }
+  };
+
+  const handleVerticalMouseUp = () => {
+    setIsDraggingVertical(false);
+  };
+
+  // Add/remove event listeners for resizing
+  useEffect(() => {
+    if (isDraggingHorizontal) {
+      document.addEventListener('mousemove', handleHorizontalMouseMove);
+      document.addEventListener('mouseup', handleHorizontalMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.removeEventListener('mousemove', handleHorizontalMouseMove);
+      document.removeEventListener('mouseup', handleHorizontalMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleHorizontalMouseMove);
+      document.removeEventListener('mouseup', handleHorizontalMouseUp);
+    };
+  }, [isDraggingHorizontal]);
+
+  useEffect(() => {
+    if (isDraggingVertical) {
+      document.addEventListener('mousemove', handleVerticalMouseMove);
+      document.addEventListener('mouseup', handleVerticalMouseUp);
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.removeEventListener('mousemove', handleVerticalMouseMove);
+      document.removeEventListener('mouseup', handleVerticalMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleVerticalMouseMove);
+      document.removeEventListener('mouseup', handleVerticalMouseUp);
+    };
+  }, [isDraggingVertical]);
 
   // Callbacks for code editor actions
   const handleRunCode = () => {
@@ -246,7 +351,7 @@ const ProblemDetail = () => {
       </div>
 
       {/* Main Content Area - Fixed Height */}
-      <div className="flex flex-1 min-h-0 flex-col lg:flex-row lg:overflow-hidden">
+      <div ref={containerRef} className="flex flex-1 min-h-0 flex-col lg:flex-row lg:overflow-hidden">
         {/* Mobile Tab Selector - Only visible on small/medium screens */}
         <div className="lg:hidden flex border-b border-gray-700/50 bg-gray-900/60 sticky top-12 z-10 shrink-0">
           <button
@@ -278,9 +383,12 @@ const ProblemDetail = () => {
         </div>
 
         {/* 2. Left Panel - Problem Description */}
-        <div className={`w-full lg:w-1/2 lg:border-r border-gray-700/50 flex flex-col shrink-0 bg-gray-900/40 backdrop-blur-sm lg:min-h-0 ${
-          mobileTab === 'description' ? 'flex' : 'hidden lg:flex'
-        }`}>
+        <div 
+          className={`lg:border-r border-gray-700/50 flex flex-col shrink-0 bg-gray-900/40 backdrop-blur-sm lg:min-h-0 ${
+            mobileTab === 'description' ? 'flex w-full' : 'hidden lg:flex'
+          }`}
+          style={{ width: isDesktop ? `${leftPanelWidth}%` : '100%' }}
+        >
           {/* Problem Header - Fixed */}
           <div className="px-5 py-4 border-b border-gray-700/50 bg-gray-900/60 shrink-0">
             <div className="flex items-center gap-2 mb-3">
@@ -365,12 +473,26 @@ const ProblemDetail = () => {
           </div>
         </div>
 
+        {/* Horizontal Resize Handle - Only visible on desktop */}
+        <div
+          className="hidden lg:block w-1 bg-gray-700/50 hover:bg-indigo-500 cursor-col-resize transition-colors relative group"
+          onMouseDown={handleHorizontalMouseDown}
+        >
+          <div className="absolute inset-y-0 -left-1 -right-1 group-hover:bg-indigo-500/20"></div>
+        </div>
+
         {/* Right Panel - Code Editor + Results */}
-        <div className={`w-full lg:w-1/2 flex flex-col bg-gray-900/40 backdrop-blur-sm shrink-0 lg:min-h-0 ${
-          mobileTab === 'code' ? 'flex' : 'hidden lg:flex'
-        }`}>
+        <div 
+          className={`flex flex-col bg-gray-900/40 backdrop-blur-sm shrink-0 lg:min-h-0 right-panel ${
+            mobileTab === 'code' ? 'flex w-full' : 'hidden lg:flex'
+          }`}
+          style={{ width: isDesktop ? `${100 - leftPanelWidth}%` : '100%' }}
+        >
           {/* 3. Code Editor Section - Fixed height, scrollable content */}
-          <div className="h-[400px] lg:h-3/5 flex flex-col border-b border-gray-700/50 shrink-0">
+          <div 
+            className="flex flex-col border-b border-gray-700/50 shrink-0"
+            style={{ height: `${codeEditorHeight}%` }}
+          >
             <CodeEditor 
               problemId={id} 
               onRunningChange={setIsRunning} 
@@ -381,8 +503,19 @@ const ProblemDetail = () => {
             />
           </div>
 
+          {/* Vertical Resize Handle */}
+          <div
+            className="h-1 bg-gray-700/50 hover:bg-indigo-500 cursor-row-resize transition-colors relative group"
+            onMouseDown={handleVerticalMouseDown}
+          >
+            <div className="absolute inset-x-0 -top-1 -bottom-1 group-hover:bg-indigo-500/20"></div>
+          </div>
+
           {/* 4. Result Section - Fixed height, scrollable content */}
-          <div className="h-[300px] lg:h-2/5 flex flex-col bg-gray-900/60 shrink-0 overflow-hidden">
+          <div 
+            className="flex flex-col bg-gray-900/60 shrink-0 overflow-hidden"
+            style={{ height: `${100 - codeEditorHeight}%` }}
+          >
             {/* Result Tabs - Fixed */}
             <div className="flex border-b border-gray-700/50 px-4 shrink-0">
               <button
