@@ -490,7 +490,7 @@ const ProblemDetail = () => {
         >
           {/* 3. Code Editor Section - Fixed height, scrollable content */}
           <div 
-            className="flex flex-col border-b border-gray-700/50 shrink-0 lg:h-auto"
+            className="flex flex-col border-b border-gray-700/50 shrink-0"
             style={{ height: isDesktop ? `${codeEditorHeight}%` : '60vh' }}
           >
             <CodeEditor 
@@ -503,18 +503,20 @@ const ProblemDetail = () => {
             />
           </div>
 
-          {/* Vertical Resize Handle */}
-          <div
-            className="h-1 bg-gray-700/50 hover:bg-indigo-500 cursor-row-resize transition-colors relative group"
-            onMouseDown={handleVerticalMouseDown}
-          >
-            <div className="absolute inset-x-0 -top-1 -bottom-1 group-hover:bg-indigo-500/20"></div>
-          </div>
+          {/* Vertical Resize Handle - Only visible on desktop */}
+          {isDesktop && (
+            <div
+              className="h-1 bg-gray-700/50 hover:bg-indigo-500 cursor-row-resize transition-colors relative group"
+              onMouseDown={handleVerticalMouseDown}
+            >
+              <div className="absolute inset-x-0 -top-1 -bottom-1 group-hover:bg-indigo-500/20"></div>
+            </div>
+          )}
 
           {/* 4. Result Section - Fixed height, scrollable content */}
           <div 
-            className="flex flex-col bg-gray-900/60 shrink-0 overflow-hidden lg:flex-1"
-            style={{ height: isDesktop ? `${100 - codeEditorHeight}%` : 'auto', minHeight: isDesktop ? 'auto' : '300px' }}
+            className="flex flex-col bg-gray-900/60 overflow-hidden flex-1"
+            style={{ height: isDesktop ? `${100 - codeEditorHeight}%` : 'auto', minHeight: isDesktop ? 'auto' : '40vh' }}
           >
             {/* Result Tabs - Fixed */}
             <div className="flex border-b border-gray-700/50 px-4 shrink-0">
