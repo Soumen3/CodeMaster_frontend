@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import userService from '../services/userService'
+import { getAvatarWithCache, clearCachedAvatar } from '../utils/avatarCache'
 
 const Profile = () => {
 	const navigate = useNavigate()
@@ -40,6 +41,10 @@ const Profile = () => {
 
 	const logout = () => {
 		try { 
+			// Clear avatar cache on logout
+			if (user?.id) {
+				clearCachedAvatar(user.id)
+			}
 			localStorage.removeItem('user')
 			localStorage.removeItem('access_token')
 		} catch (e) {}
@@ -99,7 +104,7 @@ const Profile = () => {
 						{/* Avatar */}
 						{user.avatar_url && (
 							<img 
-								src={user.avatar_url} 
+								src={getAvatarWithCache(user.id, user.avatar_url)} 
 								alt="Profile" 
 								className="w-24 h-24 rounded-full border-4 border-indigo-500 shadow-lg"
 							/>

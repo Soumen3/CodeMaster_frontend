@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Toast from '../components/Toast'
+import { setCachedAvatar } from '../utils/avatarCache'
 
 const AuthSuccess = () => {
   const navigate = useNavigate()
@@ -32,8 +33,14 @@ const AuthSuccess = () => {
         }
         localStorage.setItem('user', JSON.stringify(userInfo))
         
+        // Cache the avatar for faster subsequent loads
+        if (userData.id && userData.avatar_url) {
+          setCachedAvatar(userData.id, userData.avatar_url)
+        }
+        
         console.log('User authenticated:', userInfo)
         console.log('Token stored:', userData.token ? 'Yes' : 'No')
+        console.log('Avatar cached:', userData.avatar_url ? 'Yes' : 'No')
         
         // Show success toast
         setUserName(userInfo.name || userInfo.email)

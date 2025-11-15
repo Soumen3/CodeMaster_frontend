@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ConfirmDialog from "./ConfirmDialog";
+import { getAvatarWithCache, clearCachedAvatar } from "../utils/avatarCache";
 
 /**
  * Enhanced Navbar component with improved design
@@ -47,6 +48,10 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 	
 	const confirmLogout = () => {
 		try {
+			// Clear avatar cache on logout
+			if (user?.id) {
+				clearCachedAvatar(user.id);
+			}
 			localStorage.removeItem("user");
 			localStorage.removeItem("access_token");
 		} catch (e) {
@@ -150,7 +155,7 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 									>
 										{typeof user === "object" && user.avatar_url ? (
 											<img 
-												src={user.avatar_url} 
+												src={getAvatarWithCache(user.id, user.avatar_url)} 
 												alt="Profile" 
 												className="w-7 h-7 rounded-full border-2 border-indigo-500 group-hover:border-indigo-400 transition-colors"
 											/>
@@ -244,7 +249,7 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 										<span className="flex items-center gap-2">
 											{typeof user === "object" && user.avatar_url ? (
 												<img 
-													src={user.avatar_url} 
+													src={getAvatarWithCache(user.id, user.avatar_url)} 
 													alt="Profile" 
 													className="w-5 h-5 rounded-full border border-indigo-500"
 												/>
