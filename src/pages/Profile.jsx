@@ -48,7 +48,11 @@ const Profile = () => {
 			localStorage.removeItem('user')
 			localStorage.removeItem('access_token')
 		} catch (e) {}
+		
+		// Navigate to home and reload to refresh navbar
 		navigate('/')
+		// Force a page reload to update navbar state
+		window.location.reload()
 	}
 
 	const getDifficultyColor = (difficulty) => {
