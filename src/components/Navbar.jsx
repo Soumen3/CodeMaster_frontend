@@ -29,17 +29,33 @@ const Navbar = ({ brand = "CodeMaster" }) => {
 	}, []);
 
 	useEffect(() => {
-		try {
-			const raw = localStorage.getItem("user");
-			if (!raw) return setUser(null);
+		const loadUser = () => {
 			try {
-				setUser(JSON.parse(raw));
+				const raw = localStorage.getItem("user");
+				if (!raw) return setUser(null);
+				try {
+					setUser(JSON.parse(raw));
+				} catch (e) {
+					setUser(raw);
+				}
 			} catch (e) {
-				setUser(raw);
+				setUser(null);
 			}
-		} catch (e) {
-			setUser(null);
-		}
+		};
+
+		// Load user on mount
+		loadUser();
+
+		// Listen for storage changes (from other tabs or windows)
+		window.addEventListener('storage', loadUser);
+
+		// Listen for custom event when user logs in
+		window.addEventListener('userLogin', loadUser);
+
+		return () => {
+			window.removeEventListener('storage', loadUser);
+			window.removeEventListener('userLogin', loadUser);
+		};
 	}, []);
 
 	const handleLogout = () => {

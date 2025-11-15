@@ -38,6 +38,9 @@ const AuthSuccess = () => {
           setCachedAvatar(userData.id, userData.avatar_url)
         }
         
+        // Dispatch custom event to notify navbar of login
+        window.dispatchEvent(new Event('userLogin'))
+        
         console.log('User authenticated:', userInfo)
         console.log('Token stored:', userData.token ? 'Yes' : 'No')
         console.log('Avatar cached:', userData.avatar_url ? 'Yes' : 'No')
