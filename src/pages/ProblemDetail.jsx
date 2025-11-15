@@ -515,7 +515,7 @@ const ProblemDetail = () => {
 
           {/* 4. Result Section - Fixed height, scrollable content */}
           <div 
-            className="flex flex-col bg-gray-900/60 overflow-hidden flex-1"
+            className={`flex flex-col bg-gray-900/60 overflow-hidden flex-1 ${!isDesktop && !output ? 'hidden' : ''}`}
             style={{ height: isDesktop ? `${100 - codeEditorHeight}%` : 'auto', minHeight: isDesktop ? 'auto' : '40vh' }}
           >
             {/* Result Tabs - Fixed */}
