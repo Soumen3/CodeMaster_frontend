@@ -32,7 +32,7 @@ const ProblemDetail = () => {
   const [codeEditorHeight, setCodeEditorHeight] = useState(60); // percentage
   const [isDraggingHorizontal, setIsDraggingHorizontal] = useState(false);
   const [isDraggingVertical, setIsDraggingVertical] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Ref for Topics section
   const topicsRef = useRef(null);
@@ -43,6 +43,9 @@ const ProblemDetail = () => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
     };
+    
+    // Set initial value
+    handleResize();
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
