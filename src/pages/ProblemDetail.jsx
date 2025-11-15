@@ -491,7 +491,7 @@ const ProblemDetail = () => {
           {/* 3. Code Editor Section - Fixed height, scrollable content */}
           <div 
             className="flex flex-col border-b border-gray-700/50 shrink-0 lg:h-auto"
-            style={{ height: isDesktop ? `${codeEditorHeight}%` : '500px' }}
+            style={{ height: isDesktop ? `${codeEditorHeight}%` : '60vh' }}
           >
             <CodeEditor 
               problemId={id} 
