@@ -484,14 +484,14 @@ const ProblemDetail = () => {
         {/* Right Panel - Code Editor + Results */}
         <div 
           className={`flex flex-col bg-gray-900/40 backdrop-blur-sm shrink-0 lg:min-h-0 right-panel ${
-            mobileTab === 'code' ? 'flex w-full' : 'hidden lg:flex'
+            mobileTab === 'code' ? 'flex w-full min-h-screen' : 'hidden lg:flex'
           }`}
           style={{ width: isDesktop ? `${100 - leftPanelWidth}%` : '100%' }}
         >
           {/* 3. Code Editor Section - Fixed height, scrollable content */}
           <div 
-            className="flex flex-col border-b border-gray-700/50 shrink-0"
-            style={{ height: `${codeEditorHeight}%` }}
+            className="flex flex-col border-b border-gray-700/50 shrink-0 lg:h-auto"
+            style={{ height: isDesktop ? `${codeEditorHeight}%` : '500px' }}
           >
             <CodeEditor 
               problemId={id} 
@@ -513,8 +513,8 @@ const ProblemDetail = () => {
 
           {/* 4. Result Section - Fixed height, scrollable content */}
           <div 
-            className="flex flex-col bg-gray-900/60 shrink-0 overflow-hidden"
-            style={{ height: `${100 - codeEditorHeight}%` }}
+            className="flex flex-col bg-gray-900/60 shrink-0 overflow-hidden lg:flex-1"
+            style={{ height: isDesktop ? `${100 - codeEditorHeight}%` : 'auto', minHeight: isDesktop ? 'auto' : '300px' }}
           >
             {/* Result Tabs - Fixed */}
             <div className="flex border-b border-gray-700/50 px-4 shrink-0">
