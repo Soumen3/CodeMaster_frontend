@@ -531,7 +531,7 @@ const ProblemDetail = () => {
                     : 'text-gray-400 hover:text-gray-300'
                 }`}
               >
-                Testcase
+                Testcases
                 {resultTab === 'testcase' && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500"></div>
                 )}
