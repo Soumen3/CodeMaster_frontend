@@ -54,7 +54,7 @@ const AuthSuccess = () => {
           navigate('/')
           // Refresh the page to update all components
           window.location.reload()
-        }, 1000)
+        }, 2000)
       } catch (e) {
         console.error('Failed to parse auth data:', e)
         // Fallback: navigate to login on error
