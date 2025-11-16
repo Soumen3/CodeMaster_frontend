@@ -248,6 +248,11 @@ const ProblemDetail = () => {
     
     // Handle arrays
     if (Array.isArray(data)) {
+      // Check if it's an array of arrays or objects
+      const hasComplexElements = data.some(item => Array.isArray(item) || (typeof item === 'object' && item !== null));
+      if (hasComplexElements) {
+        return JSON.stringify(data);
+      }
       return `[${data.join(', ')}]`;
     }
     
@@ -260,6 +265,11 @@ const ProblemDetail = () => {
       // Format as key-value pairs
       return entries.map(([key, value]) => {
         if (Array.isArray(value)) {
+          // Check if it's an array of arrays or objects
+          const hasComplexElements = value.some(item => Array.isArray(item) || (typeof item === 'object' && item !== null));
+          if (hasComplexElements) {
+            return `${key} = ${JSON.stringify(value)}`;
+          }
           return `${key} = [${value.join(', ')}]`;
         } else if (typeof value === 'object' && value !== null) {
           return `${key} = ${JSON.stringify(value)}`;
