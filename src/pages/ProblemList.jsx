@@ -354,6 +354,24 @@ const ProblemList = () => {
                 )}
               </>
             )}
+
+            {/* Coming Soon Message */}
+            <div className="mt-6 relative bg-linear-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-lg p-6 border border-indigo-500/20 animate-fade-in-up overflow-hidden">
+              <div className="flex items-center gap-3 mb-2 relative z-10">
+                <svg className="w-5 h-5 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <h3 className="text-lg font-semibold text-white animate-slide-in-left">More Problems Coming Soon!</h3>
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed animate-slide-in-right relative z-10">
+                We're constantly adding new challenges to help you develop your logic skills, master algorithms, and sharpen your problem-solving abilities. 
+                Stay tuned for fresh problems across various difficulty levels and topics! 🚀
+              </p>
+              
+              {/* Animated decorative elements */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            </div>
           </>
         )}
       </div>
