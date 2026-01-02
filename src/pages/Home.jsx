@@ -57,10 +57,10 @@ using namespace std;
 
 int main(){
   ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-  int n; cin>>n; cout<<n*2<<"\n";
-}
-`}
+    cin.tie(nullptr);
+      int n; cin>>n; cout<<n*2<<"\n";
+      }
+      `}`}
                 </pre>
                 <div className="mt-4 flex gap-2">
                   <button className="px-3 py-1 bg-green-600 hover:bg-green-500 rounded-md text-sm">Run</button>
